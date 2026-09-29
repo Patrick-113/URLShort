@@ -1,0 +1,27 @@
+@URLShortnerAPI_HostAddress = http://localhost:5246
+
+GET {{URLShortnerAPI_HostAddress}}/shorten/KlskGe
+Accept: application/json
+
+###
+POST {{URLShortnerAPI_HostAddress}}/shorten/
+Content-Type: application/json
+
+{
+  "LongUrl": "testando/outro"
+}
+
+###
+PUT {{URLShortnerAPI_HostAddress}}/shorten/XIt85f
+Content-Type: application/json
+
+{
+  "LongUrl": "testando/viadagem"
+}
+
+###
+DELETE {{URLShortnerAPI_HostAddress}}/shorten/Ekt4GF
+
+###
+GET {{URLShortnerAPI_HostAddress}}/shorten/KlskGe/stats
+Accept: application/json
