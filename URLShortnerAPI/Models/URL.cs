@@ -2,12 +2,12 @@ namespace URLShortnerAPI.Models;
 
 public class URLModel
 {
-  public uint Id {get; set;}
+  public int Id {get; set;}
   public string LongUrl {get; set;}
   public string ShortCode {get; set;}
   public DateTime CreatedAt {get; set;}
   public DateTime UpdatedAt {get; set;}
-  public uint AccessCount {get; set;}
+  public int AccessCount {get; set;}
   
   public URLModel(string longUrl, string shortCode)
   {
@@ -20,7 +20,7 @@ public class URLModel
 
 public class URLViewModel
 {
-  public uint Id { get; set; }
+  public int Id { get; set; }
   public string LongUrl { get; set; }
   public string ShortCode { get; set; }
   public DateTime CreatedAt { get; set; }

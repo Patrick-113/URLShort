@@ -1,11 +1,13 @@
-using URLShortnerAPI.Memory;
+using Microsoft.EntityFrameworkCore;
+using URLShortnerAPI.Database;
 using URLShortnerAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("URLShortnerCs");
+builder.Services.AddDbContext<UrlDbContext>(o => o.UseNpgsql(connectionString));
 
-builder.Services.AddSingleton<MemoryDb>();
 builder.Services.AddScoped<URLServiceLayer>();
 
 builder.Services.AddControllers();

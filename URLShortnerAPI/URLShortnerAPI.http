@@ -1,6 +1,6 @@
 @URLShortnerAPI_HostAddress = http://localhost:5246
 
-GET {{URLShortnerAPI_HostAddress}}/shorten/KlskGe
+GET {{URLShortnerAPI_HostAddress}}/shorten/U5yNFl
 Accept: application/json
 
 ###
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{URLShortnerAPI_HostAddress}}/shorten/XIt85f
+PUT {{URLShortnerAPI_HostAddress}}/shorten/U5yNFl
 Content-Type: application/json
 
 {
@@ -20,8 +20,8 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{URLShortnerAPI_HostAddress}}/shorten/Ekt4GF
+DELETE {{URLShortnerAPI_HostAddress}}/shorten/U5yNFl
 
 ###
-GET {{URLShortnerAPI_HostAddress}}/shorten/KlskGe/stats
+GET {{URLShortnerAPI_HostAddress}}/shorten/U5yNFl/stats
 Accept: application/json

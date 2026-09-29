@@ -1,76 +1,82 @@
-using URLShortnerAPI.Memory;
+using URLShortnerAPI.Database;
 using URLShortnerAPI.Models;
 
 namespace URLShortnerAPI.Services;
 
 public class URLServiceLayer
 {
-  private readonly MemoryDb _memory;
+  private readonly UrlDbContext _context;
 
-  public URLServiceLayer(MemoryDb memory)
+  public URLServiceLayer(UrlDbContext context)
   {
-    _memory = memory;
+    _context = context;
   }
 
   public URLViewModel? CreateNew(string url)
   {
-    if (_memory.Data.Any(s => s.LongUrl.Equals(url)))
+    if(_context.shortUrls.Any(s => s.LongUrl.Equals(url)))
       return null;
 
-    URLModel newEntry = new URLModel(url, GenerateShort())
-    {
-      Id = _memory.IdTrack++
-    };
+    URLModel newEntry = new URLModel(url, GenerateShort());
 
-    _memory.Data.Add(newEntry);
+    _context.shortUrls.Add(newEntry);
+    _context.SaveChanges();
 
     URLViewModel returnData = new URLViewModel(newEntry);
-
+    
     return returnData;
   }
   
   public URLViewModel? Retrieve(string shortUrl)
   {
-    var entry = _memory.Data.SingleOrDefault(u => u.ShortCode.Equals(shortUrl));
+    var entry = _context.shortUrls.SingleOrDefault(u => u.ShortCode.Equals(shortUrl));
     if(entry is null)
       return null;
-    
+
     entry.AccessCount++;
+    _context.shortUrls.Update(entry);
+    _context.SaveChanges();
+
     URLViewModel returnData = new URLViewModel(entry);
     return returnData;
   }
 
   public URLViewModel? Update(string shortUrl, string longUrl)
   {
-    var entry = _memory.Data.SingleOrDefault(u => u.ShortCode.Equals(shortUrl));
+    var entry = _context.shortUrls.SingleOrDefault(u => u.ShortCode.Equals(shortUrl));
     if(entry is null)
       return null;
 
     entry.LongUrl = longUrl;
     entry.UpdatedAt = DateTime.UtcNow;
+    _context.shortUrls.Update(entry);
+    _context.SaveChanges();
+
     URLViewModel returnData = new URLViewModel(entry);
     return returnData;
   }
 
   public bool Delete(string shortUrl)
   {
-    var entry = _memory.Data.SingleOrDefault(u => u.ShortCode.Equals(shortUrl));
-    if(entry is null)
+    var entry = _context.shortUrls.SingleOrDefault(u => u.ShortCode.Equals(shortUrl));
+    if (entry is null)
       return false;
-    
-    return _memory.Data.Remove(entry);
+
+    _context.shortUrls.Remove(entry);
+    _context.SaveChanges();
+    return true;
   }
 
   public URLModel? GetStats(string shortUrl)
   {
-    return _memory.Data.SingleOrDefault(u => u.ShortCode.Equals(shortUrl));
+    return _context.shortUrls.SingleOrDefault(u => u.ShortCode.Equals(shortUrl));
   }
 
   private string GenerateShort()
   {
     const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var shortUrl = new string(chars.ToCharArray().Shuffle().ToArray()[..6]);
-    if (_memory.Data.Any(s => s.ShortCode == shortUrl))
+    if (_context.shortUrls.Any(s => s.ShortCode == shortUrl))
       shortUrl = GenerateShort();
 
     return shortUrl;
